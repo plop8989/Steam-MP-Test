@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://c5c7gjr27w120"]
+
+[ext_resource type="Script" uid="uid://cg18ly364a5f7" path="res://scripts/MP/MPM.gd" id="1_71j4m"]
+[ext_resource type="Texture2D" uid="uid://bimgshinuyfn7" path="res://resources/kloppenheim_06_puresky_2k.hdr" id="1_k0juu"]
+[ext_resource type="Texture2D" uid="uid://cmkjwu7t688fp" path="res://resources/Dark/texture_03.png" id="1_rwgxs"]
+[ext_resource type="Texture2D" uid="uid://dp1us8yaojnig" path="res://resources/Dark/texture_01.png" id="2_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://d17m815d7wios" path="res://controllers/player.tscn" id="3_4wyf3"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_71j4m"]
+panorama = ExtResource("1_k0juu")
+
+[sub_resource type="Sky" id="Sky_qfnet"]
+sky_material = SubResource("PanoramaSkyMaterial_71j4m")
+
+[sub_resource type="Environment" id="Environment_i7141"]
+background_mode = 2
+sky = SubResource("Sky_qfnet")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_e5uuo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k0juu"]
+albedo_texture = ExtResource("1_rwgxs")
+normal_texture = ExtResource("2_4wyf3")
+uv1_scale = Vector3(20, 20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnsk1"]
+
+[node name="World" type="Node3D" unique_id=749227724]
+script = ExtResource("1_71j4m")
+player_scene = ExtResource("3_4wyf3")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=182589527]
+environment = SubResource("Environment_i7141")
+
+[node name="floor" type="MeshInstance3D" parent="." unique_id=1836744590]
+transform = Transform3D(20, 0, 0, 0, 0.5, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("BoxMesh_e5uuo")
+surface_material_override/0 = SubResource("StandardMaterial3D_k0juu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="floor" unique_id=1840874409]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor/StaticBody3D" unique_id=662584632]
+shape = SubResource("BoxShape3D_nnsk1")
+debug_color = Color(0.866667, 0.309804, 0.45098, 1)
+debug_fill = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1898511726]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, 0, 0, 0)
+light_energy = 2.981
+light_indirect_energy = 1.412
+light_volumetric_fog_energy = 2.219
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1712083961]
+
+[node name="Host" type="Button" parent="CanvasLayer" unique_id=174567175]
+offset_left = 432.0
+offset_top = 270.0
+offset_right = 518.0
+offset_bottom = 328.0
+text = "HOST"
+
+[node name="Join" type="Button" parent="CanvasLayer" unique_id=1163983308]
+offset_left = 518.0
+offset_top = 270.0
+offset_right = 604.0
+offset_bottom = 328.0
+disabled = true
+text = "JOIN"
+
+[node name="id_Prompt" type="LineEdit" parent="CanvasLayer" unique_id=633771247]
+offset_left = 518.0
+offset_top = 328.0
+offset_right = 604.0
+offset_bottom = 359.0
+placeholder_text = "Lobby ID"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=587111764]
+_spawnable_scenes = PackedStringArray("uid://d17m815d7wios")
+spawn_path = NodePath("..")
+
+[node name="InGameCanvas" type="CanvasLayer" parent="." unique_id=87762379]
+
+[node name="id_label" type="Label" parent="InGameCanvas" unique_id=1969868034]
+offset_left = 3.0
+offset_top = 20.0
+offset_right = 166.0
+offset_bottom = 43.0
+text = "ID: "

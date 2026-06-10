@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://d17m815d7wios"]
+
+[ext_resource type="Script" uid="uid://bq6u6do5xxwpf" path="res://controllers/scripts/player.gd" id="1_c6ltv"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hihyl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_c6ltv"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_c6ltv"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="CharacterBody3D" type="CharacterBody3D" node_paths=PackedStringArray("CAM_CONTROLLER")]
+script = ExtResource("1_c6ltv")
+MOUSE_SENSITIVITY = 0.75
+CAM_CONTROLLER = NodePath("CameraController/Camera3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_hihyl")
+
+[node name="Placeholder mesh" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_c6ltv")
+
+[node name="CameraController" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraController"]
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController/Camera3D"]
+visible = false
+update_mode = 1
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_c6ltv")
