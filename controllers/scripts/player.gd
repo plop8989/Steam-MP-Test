@@ -19,6 +19,7 @@ var mouse_locked: bool = false
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(name.to_int())
+	$MultiplayerSynchronizer.set_multiplayer_authority(name.to_int())
 
 func _input(event):
 	if event.is_action_pressed("exit"):
@@ -33,18 +34,17 @@ func _unhandled_input(event):
 	#print(Vector2(_mouse_horizontal, _mouse_vertical))
 	
 func _update_camera(delta):
-	#rotate cam using euler rotation
 	_mouse_rotation.x += _mouse_vertical * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, CAM_VERT_LOWER_LIMIT, CAM_VERT_UPPER_LIMIT)
 	_mouse_rotation.y += _mouse_horizontal * delta
 	
-	_player_rotation = Vector3(0.0, _mouse_rotation.y,0.0)
-	_camera_rotation = Vector3(_mouse_rotation.x,0.0,0.0)
+	_player_rotation = Vector3(0.0, _mouse_rotation.y, 0.0)
+	_camera_rotation = Vector3(_mouse_rotation.x, 0.0, 0.0)
 	
-	CAM_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)
+	CAM_CONTROLLER.rotation = _camera_rotation
 	CAM_CONTROLLER.rotation.z = 0.0
 	
-	global_transform.basis = Basis.from_euler(_player_rotation)
+	rotation = _player_rotation
 	
 	_mouse_horizontal = 0.0
 	_mouse_vertical = 0.0
